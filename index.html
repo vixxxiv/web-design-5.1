@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vix — Портфолио (mobile‑first)</title>
+  <style>
+    :root {
+      --bg: #0b0c10;
+      --card: #111218;
+      --text: #eaeef2;
+      --subtext: #9aa4af;
+      --accent: #7c5cff;
+      --accent-2: #27c1a5;
+      --border: #1e2230;
+      --muted: #0f1117;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    .theme-light {
+      --bg: #f6f7fb; --card: #fff; --text: #111827; --subtext: #4b5563;
+      --accent: #6b4bff; --accent-2: #13b38a; --border: #e5e7eb; --muted: #f3f4f6; --shadow: 0 8px 24px rgba(17,24,39,.08);
+    }
+
+    /* База (mobile‑first) */
+    html { scroll-behavior: smooth; }
+    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background: var(--bg); color: var(--text); line-height:1.6; }
+    .container { width:min(100%, 720px); margin-inline:auto; padding-inline:16px; }
+    .section { padding:64px 0; }
+    .card { background:var(--card); border:1px solid var(--border); border-radius:16px; box-shadow:var(--shadow); }
+    .pill { display:inline-flex; align-items:center; gap:.5rem; padding:.35rem .75rem; border-radius:999px; background:var(--muted); border:1px solid var(--border); color:var(--subtext); font-size:.95rem; }
+
+    /* Хэдер */
+    header { position:sticky; top:0; z-index:50; backdrop-filter:saturate(180%) blur(12px); background: color-mix(in oklab, var(--bg), transparent 28%); border-bottom:1px solid var(--border); }
+    .nav { display:grid; grid-template-columns: auto 1fr auto; align-items:center; height:64px; gap:12px; }
+    .logo { display:inline-flex; align-items:center; gap:.6rem; text-decoration:none; color:var(--text); font-weight:800; }
+    .logo-mark { width:30px; height:30px; display:grid; place-items:center; border-radius:8px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color:#fff; font-weight:900; letter-spacing:.5px; }
+    .desk-nav { display:none; justify-content:center; }
+    .desk-nav ul { list-style:none; display:flex; gap:.6rem; margin:0; padding:0; }
+    .desk-nav a { text-decoration:none; color:var(--subtext); padding:.5rem .75rem; border-radius:10px; border:1px solid transparent; }
+    .desk-nav a:hover, .desk-nav a:focus { color:var(--text); background:var(--muted); border-color:var(--border); }
+    .theme-toggle { width:40px; height:40px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); display:grid; place-items:center; cursor:pointer; }
+    .theme-toggle svg { width:20px; height:20px; }
+
+    /* Мобильные табы под шапкой */
+    .tabs-wrap { border-top:1px solid var(--border); border-bottom:1px solid var(--border); background: color-mix(in oklab, var(--bg), transparent 14%); }
+    .tabs { display:grid; grid-auto-flow:column; gap:6px; overflow-x:auto; scrollbar-width:none; padding:8px 16px; }
+    .tabs::-webkit-scrollbar { display:none; }
+    .tabs a { white-space:nowrap; text-decoration:none; color:var(--subtext); border:1px solid transparent; background:var(--muted); padding:.5rem .75rem; border-radius:999px; }
+    .tabs a:hover, .tabs a:focus { color:var(--text); border-color:var(--border); }
+
+    /* Hero / Обо мне */
+    .avatar { border-radius:16px; overflow:hidden; border:1px solid var(--border); background:var(--muted); }
+    .avatar img { width:100%; display:block; }
+    .qualities { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+
+    /* Навыки */
+    .skills { padding:20px; }
+    .skills-grid { display:grid; grid-template-columns:1fr; gap:16px; margin-top:16px; }
+    .skill { display:flex; align-items:center; gap:14px; padding:14px; border-radius:14px; }
+    .icon { width:40px; height:40px; border-radius:10px; display:grid; place-items:center; background:var(--muted); border:1px solid var(--border); font-weight:800; }
+
+    /* Портфолио */
+    .portfolio-grid { display:grid; gap:16px; }
+    .project { position:relative; border-radius:16px; overflow:hidden; box-shadow:var(--shadow); background:var(--card); }
+    .thumb img{ width:100%; display:block; }
+    .btn-overlay { position:absolute; bottom:16px; left:50%; transform:translateX(-50%) scale(0.9); padding:10px 20px; border:none; border-radius:8px; background:var(--accent); color:#fff; font-weight:600; cursor:pointer; opacity:0; transition:all .3s ease; }
+    .project:hover .btn-overlay { opacity:1; transform:translateX(-50%) scale(1.1); }
+
+    /* Подвал */
+    footer{ border-top:1px solid var(--border); padding:32px 0 56px; color:var(--subtext); }
+    .footer-grid { display:grid; gap:18px; }
+    .features { display:grid; gap:8px; padding-left:1rem; }
+
+    /* Расширения */
+    @media (min-width: 600px) {
+      .skills-grid { grid-template-columns: repeat(2, 1fr); }
+      .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 900px) {
+      .desk-nav { display:flex; }
+      .tabs-wrap { display:none; }
+      .hero-grid { display:grid; grid-template-columns:340px 1fr; gap:40px; align-items:center; }
+      .skills-grid { grid-template-columns: repeat(3, 1fr); }
+      .portfolio-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <a class="pill" href="#main" style="position:absolute; left:-9999px; top:auto;">Пропустить навигацию</a>
+
+  <!-- ===== ХЭДЕР ===== -->
+  <header>
+    <div class="container nav" role="navigation" aria-label="Основная навигация">
+      <a class="logo" href="#top" aria-label="На главную">
+        <span class="logo-mark" aria-hidden="true">vix</span>
+        <span>Vix</span>
+      </a>
+      <nav class="desk-nav" aria-label="Навигация по разделам">
+        <ul>
+          <li><a href="#about">Обо мне</a></li>
+          <li><a href="#skills">Навыки</a></li>
+          <li><a href="#portfolio">Портфолио</a></li>
+        </ul>
+      </nav>
+      <button class="theme-toggle" id="themeToggle" aria-label="Переключить тему">
+        <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/>
+          <line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+      </button>
+    </div>
+    <!-- Мобильные табы -->
+    <div class="tabs-wrap">
+      <div class="tabs container" role="tablist" aria-label="Быстрая навигация">
+        <a role="tab" href="#about">Обо мне</a>
+        <a role="tab" href="#skills">Навыки</a>
+        <a role="tab" href="#portfolio">Портфолио</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="container">
+    <!-- ===== ОБО МНЕ ===== -->
+    <section id="about" class="section">
+      <div class="hero-grid">
+        <figure class="avatar card">
+          <!-- Векторный аватар (SVG) без внешних источников -->
+          <img alt="Векторный аватар" src="img/me.png"/>
+        </figure>
+        <div>
+          <span class="pill">Графический дизайнер</span>
+          <h1 style="margin:.35rem 0 0; font-size: clamp(1.6rem, 1.1rem + 2.5vw, 2.2rem);">Виктория Новожилова</h1>
+          <p style="color: var(--subtext); max-width: 65ch;">Создаю визуальные системы и айдентики, упаковку и рекламные материалы, сочетая эстетику, читаемость и цели бизнеса.</p>
+          <div class="qualities">
+            <span class="pill">Ответственность</span>
+            <span class="pill">Командная работа</span>
+            <span class="pill">Креативность</span>
+            <span class="pill">Внимание к деталям</span>
+            <span class="pill">Пунктуальность</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== НАВЫКИ ===== -->
+    <section id="skills" class="section">
+      <div class="card skills">
+        <h2>Навыки</h2>
+        <p style="color: var(--subtext); max-width: 72ch;">Уверенно владею периферией Adobe для графического дизайна (Illustrator, Photoshop, InDesign, XD/Figma), верстаю на HTML и CSS, понимаю основы UX/UI и препресс.</p>
+        <div class="skills-grid">
+          <div class="skill card"><div class="icon">Ai</div><div><strong>Adobe Illustrator</strong><div style="color:var(--subtext)">Вектор, логотипы, айдентика</div></div></div>
+          <div class="skill card"><div class="icon">Ps</div><div><strong>Adobe Photoshop</strong><div style="color:var(--subtext)">Ретушь, коллажи, цвет</div></div></div>
+          <div class="skill card"><div class="icon">Id</div><div><strong>Adobe InDesign</strong><div style="color:var(--subtext)">Полиграфия, каталоги</div></div></div>
+          <div class="skill card"><div class="icon">Fig</div><div><strong>Figma</strong><div style="color:var(--subtext)">Прототипы, компоненты</div></div></div>
+          <div class="skill card"><div class="icon">HTML</div><div><strong>HTML</strong><div style="color:var(--subtext)">Семантика, адаптив</div></div></div>
+          <div class="skill card"><div class="icon">CSS</div><div><strong>CSS</strong><div style="color:var(--subtext)">Grid/Flex, анимации</div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== ПОРТФОЛИО ===== -->
+    <section id="portfolio" class="section">
+      <h2 style="margin-bottom:12px;">Портфолио</h2>
+      <div class="portfolio-grid">
+        <article class="project">
+          <div class="thumb">
+            <img alt="Проект 1 — абстрактный постер" src="img/friggy.jpg"/>
+          </div>
+          <button class="btn-overlay">Подробнее</button>
+        </article>
+        <article class="project">
+          <div class="thumb">
+            <img alt="Проект 2 — геометрия" src="img/logo.jpg"/>
+          </div>
+          <button class="btn-overlay">Подробнее</button>
+        </article>
+        <article class="project">
+          <div class="thumb">
+            <img alt="Проект 3 — градиентные волны" src="img/pixelcode.jpg"/>
+          </div>
+          <button class="btn-overlay">Подробнее</button>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== ПОДВАЛ ===== -->
+  <footer>
+    <div class="container footer-grid">
+      <div>
+        <div class="pill" style="margin-bottom:.5rem;">Контакты</div>
+        <p>Telegram: <a href="https://t.me/your_username" target="_blank" rel="noopener">@vixxxtract</a></p>
+        <p style="margin-top:10px;">Время, затраченное на создание сайта: <strong id="buildTime">≈ 1.5 часа</strong></p>
+      </div>
+      <div>
+        <div class="pill" style="margin-bottom:.5rem;">Функционал сайта</div>
+        <ul class="features">
+          <li>Переключение светлой/тёмной темы (сохранение выбора)</li>
+          <li>Mobile‑first адаптивная вёрстка</li>
+          <li>Якорная навигация и плавная прокрутка</li>
+          <li>SVG‑изображения встроены, работает офлайн</li>
+          <li>Анимация кнопок «Подробнее» (Web Animations API)</li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Переключение темы
+    const root=document.documentElement; const themeToggle=document.getElementById('themeToggle'); const themeIcon=document.getElementById('themeIcon');
+    function setIcon(){ themeIcon.innerHTML=root.classList.contains('theme-light')
+      ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
+      : '<circle cx="12" cy="12" r="5"/>'+
+        '<line x1="12" y1="1" x2="12" y2="3"/>'+
+        '<line x1="12" y1="21" x2="12" y2="23"/>'+
+        '<line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>'+
+        '<line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>'+
+        '<line x1="1" y1="12" x2="3" y2="12"/>'+
+        '<line x1="21" y1="12" x2="23" y2="12"/>'+
+        '<line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>'+
+        '<line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+    }
+    themeToggle.addEventListener('click',()=>{root.classList.toggle('theme-light'); setIcon();}); setIcon();
+
+    // Анимация кнопок при наведении (Web Animations API)
+    document.querySelectorAll('.btn-overlay').forEach(btn=>{
+      btn.addEventListener('mouseenter',()=>{
+        btn.animate([
+          { transform:'translateX(-50%) scale(1.05)', opacity:1 },
+          { transform:'translateX(-50%) scale(1.18)', opacity:1 },
+          { transform:'translateX(-50%) scale(1.10)', opacity:1 }
+        ],{ duration:380, easing:'cubic-bezier(.22,.61,.36,1)', iterations:1 });
+      });
+    });
+  </script>
+</body>
+</html>
